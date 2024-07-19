@@ -3,12 +3,14 @@ import string
 def convert_from_base(num_str, base):
     # Конвертация числа из произвольной системы счисления в десятичную
     decimal_value = 0
+    power = len(num_str) - 1
     for digit in num_str:
         if '0' <= digit <= '9':
-            value = ord(digit) - ord('0')
+            value = int(digit)
         else:
             value = ord(digit.lower()) - ord('a') + 10
-        decimal_value = decimal_value * base + value
+        decimal_value += value * (base ** power)
+        power -= 1
     return decimal_value
 
 def convert_to_base(decimal_value, base):
@@ -32,11 +34,14 @@ def Convert(initial_base, final_base, number):
     if initial_base < 2 or final_base < 2:
         raise ValueError("Основание системы счисления должно быть не менее 2.")
 
+    # Преобразуем число в строку, если оно не является строкой (для случаев, когда number уже строка, это не изменит его)
+    num_str = str(number)
+
     # Конвертируем число в десятичную систему, если оно не в ней
     if initial_base != 10:
-        decimal_number = convert_from_base(number, initial_base)
+        decimal_number = convert_from_base(num_str, initial_base)
     else:
-        decimal_number = int(number)
+        decimal_number = int(num_str)
 
     # Конвертируем число из десятичной системы в final_base
     if final_base == 10:
